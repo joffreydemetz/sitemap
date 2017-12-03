@@ -11,9 +11,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Test Sitemap
- * 
- * @author Joffrey Demetz <joffrey.demetz@gmail.com>
+ * @package Test
+ * @author  Joffrey Demetz <joffrey.demetz@gmail.com>
  */
 class SitemapTest extends TestCase
 {
