@@ -4,7 +4,7 @@
     "description": "Sitemap generator",
     "keywords": ["sitemap"],
     "homepage": "http://joffreydemetz.com/git/sitemap/",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "license": "MIT",
 
     "authors": [
@@ -18,7 +18,7 @@
 
     "require": {
         "php": ">=5.6",
-        "jdz/filesystem": "^1.1"
+        "jdz/filesystem": "^1.2"
     },
 
     "autoload": {
