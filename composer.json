@@ -3,21 +3,20 @@
     "type": "library",
     "description": "Sitemap generator",
     "keywords": ["sitemap"],
-    "homepage": "http://joffreydemetz.com/git/sitemap/",
-    "version": "1.2.0",
+    "homepage": "https://github.com/joffreydemetz/sitemap/",
+    "version": "1.2.1",
     "license": "MIT",
 
     "authors": [
         {
             "name": "Joffrey Demetz",
             "email": "joffrey.demetz@gmail.com",
-            "homepage": "http://joffreydemetz.com",
+            "homepage": "https://joffreydemetz.com",
             "role": "Lead"
         }
     ],
 
     "require": {
-        "php": ">=5.6",
         "jdz/filesystem": "^1.2"
     },
 
