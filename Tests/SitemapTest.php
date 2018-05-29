@@ -3,7 +3,7 @@
  * THIS SOFTWARE IS PRIVATE
  * CONTACT US FOR MORE INFORMATION
  * Joffrey Demetz <joffrey.demetz@gmail.com>
- * <http://joffreydemetz.com>
+ * <https://joffrey.demetz.com>
  */
 namespace JDZ\Sitemap;
 
