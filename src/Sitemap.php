@@ -48,82 +48,66 @@ class Sitemap implements SitemapInterface
   /**
    * @var   string    Path to the file to be written
    */
-  protected $filepath;
+  protected $filepath = null;
   
   /**
    * @var   string    Name of the file to be written
    */
-  protected $filename;
+  protected $filename = 'sitemap';
   
   /**
    * @var   string    The website base url
    */
-  protected $website;
+  protected $website = '';
 
   /**
    * @var   int       Maximum allowed number of URLs in a single file
    */
-  protected $maxUrls;
+  protected $maxUrls = 50000;
 
   /**
    * @var   int       Number of URLs to be kept in memory before writing it to file
    */
-  protected $bufferSize;
+  protected $bufferSize = 1000;
 
   /**
    * @var   int       Number of URLs added
    */
-  protected $urlsCount;
+  protected $urlsCount = 0;
 
   /**
    * @var   bool      XML should be indented
    */
-  protected $useIndent;
+  protected $useIndent = true;
 
   /**
    * @var   XMLWriter   XML writer
    */
-  protected $writer;
+  protected $writer = null;
   
   /**
    * @var   array     Path of files written
    */
-  protected $writtenFilePaths;
+  protected $writtenFilePaths = [];
 
   /**
    * @var   array     Written urls (to insure uniqueness)
    */
-  protected $writtenUrls;
+  protected $writtenUrls = [];
 
   /**
    * @var   int       Number of files written
    */
-  protected $fileCount;
+  protected $fileCount = 0;
 
   /**
    * @var   string    Current filepath
    */
-  protected $fileCurrent;
-
-  /**
-   * Constructor
-   * 
-   * @throws  Exception
-   */
-  public function __construct()
+  protected $fileCurrent = '';
+  
+  public static function create()
   {
-    $this->filepath         = null;
-    $this->filename         = 'sitemap';
-    $this->website          = '';
-    $this->maxUrls          = 50000;
-    $this->bufferSize       = 1000;
-    $this->urlsCount        = 0;
-    $this->useIndent        = true;
-    $this->writer           = null;
-    $this->writtenFilePaths = [];
-    $this->writtenUrls      = [];
-    $this->fileCount        = 0;
-    $this->fileCurrent      = '';
+    return new self();
   }
   
   /**
@@ -162,6 +146,7 @@ class Sitemap implements SitemapInterface
     }
     
     $this->filepath = $filepath;
+    return $this;
   }
   
   /**
@@ -170,6 +155,7 @@ class Sitemap implements SitemapInterface
   public function setFilename($filename)
   {
     $this->filename = (string)$filename;
+    return $this;
   }
   
   /**
@@ -183,6 +169,7 @@ class Sitemap implements SitemapInterface
     }
     
     $this->website = $website;
+    return $this;
   }
   
   /**
@@ -191,6 +178,7 @@ class Sitemap implements SitemapInterface
   public function setMaxUrls($number)
   {
     $this->maxUrls = (int)$number;
+    return $this;
   }
   
   /**
@@ -199,6 +187,7 @@ class Sitemap implements SitemapInterface
   public function setBufferSize($number)
   {
     $this->bufferSize = (int)$number;
+    return $this;
   }
   
   /**
@@ -207,6 +196,7 @@ class Sitemap implements SitemapInterface
   public function setUseIndent($value)
   {
     $this->useIndent = (bool)$value;
+    return $this;
   }
 
   /**
@@ -265,6 +255,7 @@ class Sitemap implements SitemapInterface
     $this->writtenUrls[] = $location;
     
     $this->urlsCount++;
+    return $this;
   }
   
   /**
@@ -283,6 +274,7 @@ class Sitemap implements SitemapInterface
       $this->index->addItem(pathinfo($file, PATHINFO_BASENAME), $lastModified);
     }
     $this->index->write();
+    return $this;
   }
   
   /**
