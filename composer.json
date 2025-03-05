@@ -2,11 +2,13 @@
     "name": "jdz/sitemap",
     "type": "library",
     "description": "JDZ Sitemap generator",
-    "keywords": ["JDZ","utilities","sitemap"],
-    "homepage": "https://jdz.joffreydemetz.com/http/",
-    "version": "1.0.0",
+    "keywords": [
+        "JDZ",
+        "utilities",
+        "sitemap"
+    ],
+    "homepage": "https://jdz.joffreydemetz.com/sitemap/",
     "license": "MIT",
-    
     "authors": [
         {
             "name": "Joffrey Demetz",
@@ -15,7 +17,6 @@
             "role": "Lead"
         }
     ],
-    
     "autoload": {
         "psr-4": {
             "JDZ\\Sitemap\\": "src"
