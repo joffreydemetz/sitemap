@@ -26,7 +26,7 @@ class UrlTest extends TestCase
         $url = new Url(
             '/test-page',
             '2023-01-15 10:00:00',
-            Url::DAILY,
+            Frequency::DAILY,
             0.8
         );
 
@@ -35,7 +35,7 @@ class UrlTest extends TestCase
 
     public function testToSitemapWithValidUrl()
     {
-        $url = new Url('/test-page', '2023-01-15 10:00:00', Url::WEEKLY, 0.7);
+        $url = new Url('/test-page', '2023-01-15 10:00:00', Frequency::WEEKLY, 0.7);
         $website = 'https://example.com';
 
         $result = $url->toSitemap($website);
@@ -47,7 +47,7 @@ class UrlTest extends TestCase
         $this->assertArrayHasKey('priority', $result);
 
         $this->assertEquals('https://example.com/test-page', $result['loc']);
-        $this->assertEquals(Url::WEEKLY, $result['changefreq']);
+        $this->assertEquals(Frequency::WEEKLY->value, $result['changefreq']);
         $this->assertEquals(0.7, $result['priority']);
     }
 
@@ -87,7 +87,7 @@ class UrlTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Please specify valid priority');
 
-        $url = new Url('/test', 'now', Url::WEEKLY, -0.1);
+        $url = new Url('/test', 'now', Frequency::WEEKLY, -0.1);
         $url->toSitemap('https://example.com');
     }
 
@@ -96,7 +96,7 @@ class UrlTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Please specify valid priority');
 
-        $url = new Url('/test', 'now', Url::WEEKLY, 1.1);
+        $url = new Url('/test', 'now', Frequency::WEEKLY, 1.1);
         $url->toSitemap('https://example.com');
     }
 
@@ -161,18 +161,18 @@ class UrlTest extends TestCase
         $url = new Url('/test');
         $result = $url->toSitemap('https://example.com');
 
-        $this->assertEquals(Url::WEEKLY, $result['changefreq']);
+        $this->assertEquals(Frequency::WEEKLY->value, $result['changefreq']);
     }
 
     public function testPriorityBoundaries()
     {
         // Test minimum valid priority
-        $url = new Url('/test', 'now', Url::WEEKLY, 0.0);
+        $url = new Url('/test', 'now', Frequency::WEEKLY, 0.0);
         $result = $url->toSitemap('https://example.com');
         $this->assertEquals(0.0, $result['priority']);
 
         // Test maximum valid priority
-        $url = new Url('/test', 'now', Url::WEEKLY, 1.0);
+        $url = new Url('/test', 'now', Frequency::WEEKLY, 1.0);
         $result = $url->toSitemap('https://example.com');
         $this->assertEquals(1.0, $result['priority']);
     }
@@ -212,14 +212,5 @@ class UrlTest extends TestCase
 
             $this->assertEquals($expectedValue, $result['changefreq']);
         }
-    }
-
-    public function testBackwardCompatibilityWithStringConstants()
-    {
-        // Test that old string constants still work
-        $url = new Url('/test', 'now', Url::DAILY, 0.5);
-        $result = $url->toSitemap('https://example.com');
-
-        $this->assertEquals('daily', $result['changefreq']);
     }
 }

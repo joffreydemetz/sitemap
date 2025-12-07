@@ -218,7 +218,7 @@ class MapTest extends TestCase
     {
         $map = new Map($this->testDir, 'test-sitemap', 'https://example.com');
 
-        $map->addItem(new Url('/page1', '2023-06-15', Url::DAILY, 0.8));
+        $map->addItem(new Url('/page1', '2023-06-15', Frequency::DAILY, 0.8));
         $map->write();
 
         $content = file_get_contents($this->testDir . 'sitemap' . DIRECTORY_SEPARATOR . 'test-sitemap.xml');
