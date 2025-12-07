@@ -1,2 +1,7 @@
 composer.lock
 /vendor/
+
+/examples/public/
+
+/.phpunit.cache/
+/tests/_data/
