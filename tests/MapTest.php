@@ -10,7 +10,6 @@ namespace JDZ\Sitemap\Tests;
 use PHPUnit\Framework\TestCase;
 use JDZ\Sitemap\Map;
 use JDZ\Sitemap\Url;
-use JDZ\Sitemap\Exception;
 use JDZ\Sitemap\Frequency;
 
 class MapTest extends TestCase

@@ -24,6 +24,11 @@ class Writer
     $this->closeFile();
   }
 
+  public function getWrittenUrls(): array
+  {
+    return $this->writtenUrls;
+  }
+
   protected function initWriter()
   {
     $this->writer = new \XMLWriter();

@@ -10,7 +10,6 @@ namespace JDZ\Sitemap\Tests;
 use PHPUnit\Framework\TestCase;
 use JDZ\Sitemap\Index;
 use JDZ\Sitemap\Group;
-use JDZ\Sitemap\Exception;
 
 class IndexTest extends TestCase
 {
