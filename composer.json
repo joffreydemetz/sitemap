@@ -17,6 +17,11 @@
             "role": "Lead"
         }
     ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.1",
+        "ext-simplexml": "*"
+    },
     "autoload": {
         "psr-4": {
             "JDZ\\Sitemap\\": "src"
