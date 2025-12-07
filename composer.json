@@ -29,5 +29,10 @@
         "psr-4": {
             "JDZ\\Sitemap\\": "src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JDZ\\Sitemap\\Tests\\": "tests"
+        }
     }
 }
