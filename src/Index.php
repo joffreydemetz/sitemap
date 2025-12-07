@@ -34,6 +34,10 @@ class Index extends Writer
     if (null === $this->writer) {
       $this->initWriter();
 
+      if (null === $this->writer) {
+        throw new \RuntimeException('XMLWriter not initialized');
+      }
+
       $this->writer->startElement('sitemapindex');
       $this->writer->writeAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
     }
