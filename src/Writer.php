@@ -47,13 +47,13 @@ class Writer
   protected function writeFile(): void
   {
     if ($this->writer instanceof \XMLWriter) {
-      if (false === ($fp = \fopen($this->currentPath, 'w'))) {
+      if (false === ($fp = @\fopen($this->currentPath, 'w'))) {
         throw new Exception('Unable to open file (' . $this->currentPath . ')');
       }
 
       $content = $this->writer->flush(true);
 
-      if (false === \fwrite($fp, $content)) {
+      if (false === @\fwrite($fp, $content)) {
         throw new Exception('Unable to write in file (' . $this->currentPath . ')');
       }
 
