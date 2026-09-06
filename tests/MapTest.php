@@ -234,6 +234,78 @@ class MapTest extends TestCase
         $this->assertEquals('0.8', (string)$url->priority);
     }
 
+    public function testFlatModeWritesSingleRootFile()
+    {
+        $map = new Map($this->testDir, 'sitemap', 'https://example.com', true, true);
+
+        $map->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
+        $map->addItem(new Url('/legal-notice', 'now', Frequency::WEEKLY, 0.5));
+        $map->write();
+
+        $this->assertFileExists($this->testDir . 'sitemap.xml');
+        $this->assertFileDoesNotExist($this->testDir . 'sitemap' . DIRECTORY_SEPARATOR . 'sitemap.xml');
+        $this->assertEquals(['sitemap.xml'], $map->writtenFilePaths);
+
+        $content = file_get_contents($this->testDir . 'sitemap.xml');
+        $xml = simplexml_load_string($content);
+        $this->assertNotFalse($xml, 'Generated XML should be valid');
+        $this->assertEquals('urlset', $xml->getName());
+        $this->assertCount(2, $xml->url);
+        $this->assertEquals('https://example.com/', (string)$xml->url[0]->loc);
+        $this->assertEquals('https://example.com/legal-notice', (string)$xml->url[1]->loc);
+    }
+
+    public function testFlatModeDoesNotNeedSitemapDirectory()
+    {
+        $testDir = self::$baseTestDir . DIRECTORY_SEPARATOR . 'sitemap_flat_' . uniqid() . DIRECTORY_SEPARATOR;
+        mkdir($testDir);
+        // Note: NOT creating a sitemap subdirectory
+
+        try {
+            $map = new Map($testDir, 'sitemap', 'https://example.com', true, true);
+            $map->addItem(new Url('/page1'));
+            $map->write();
+
+            $this->assertFileExists($testDir . 'sitemap.xml');
+        } finally {
+            if (is_dir($testDir)) {
+                array_map('unlink', glob($testDir . '*'));
+                rmdir($testDir);
+            }
+        }
+    }
+
+    public function testBufferedFlushKeepsAllChunks()
+    {
+        // BUFFER_SIZE is 1000: 2500 urls span three flushes; every chunk must
+        // land in the file (regression: 'w' on each flush truncated the
+        // previous chunks).
+        $map = new Map($this->testDir, 'test-sitemap', 'https://example.com');
+
+        for ($i = 1; $i <= 2500; $i++) {
+            $map->addItem(new Url('/page' . $i));
+        }
+        $map->write();
+
+        $content = file_get_contents($this->testDir . 'sitemap' . DIRECTORY_SEPARATOR . 'test-sitemap.xml');
+        $xml = simplexml_load_string($content);
+        $this->assertNotFalse($xml, 'Generated XML should be valid');
+        $this->assertCount(2500, $xml->url);
+        $this->assertEquals('https://example.com/page1', (string)$xml->url[0]->loc);
+        $this->assertEquals('https://example.com/page2500', (string)$xml->url[2499]->loc);
+    }
+
+    public function testFlatModeRefusesMoreThanMaxUrls()
+    {
+        $map = new Map($this->testDir, 'sitemap', 'https://example.com', false, true);
+
+        $this->expectException(\JDZ\Sitemap\Exception::class);
+
+        for ($i = 1; $i <= 40001; $i++) {
+            $map->addItem(new Url('/page' . $i));
+        }
+    }
+
     public function testRequiresSitemapDirectory()
     {
         // This test verifies that the sitemap subdirectory must exist

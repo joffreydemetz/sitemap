@@ -18,6 +18,12 @@ class Writer
   protected bool $useIndent = false;
   protected ?\XMLWriter $writer = null;
   protected array $writtenUrls = [];
+  /**
+   * Buffered maps flush every BUFFER_SIZE urls: the first flush of a file
+   * truncates ('w'), every following flush appends ('a'). Reset when a new
+   * file is started.
+   */
+  protected bool $appendNext = false;
 
   public function write(): void
   {
@@ -52,7 +58,7 @@ class Writer
   protected function writeFile(): void
   {
     if ($this->writer instanceof \XMLWriter) {
-      if (false === ($fp = @\fopen($this->currentPath, 'w'))) {
+      if (false === ($fp = @\fopen($this->currentPath, $this->appendNext ? 'a' : 'w'))) {
         throw new Exception('Unable to open file (' . $this->currentPath . ')');
       }
 
@@ -63,6 +69,8 @@ class Writer
       }
 
       \fclose($fp);
+
+      $this->appendNext = true;
     }
   }
 }

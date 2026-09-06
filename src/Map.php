@@ -25,13 +25,20 @@ class Map extends Writer
   private string $website = '';
   private int $urlsCount = 0;
   private int $fileCount = 0;
+  /**
+   * Flat mode: one urlset written directly to {filepath}{filename}.xml —
+   * no sitemap/ subdirectory, no index needed. Refuses to exceed
+   * MAX_URL_PER_FILES since a flat file cannot split.
+   */
+  private bool $flat = false;
 
-  public function __construct(string $filepath, string $filename, string $website, bool $useIndent = true)
+  public function __construct(string $filepath, string $filename, string $website, bool $useIndent = true, bool $flat = false)
   {
     $this->filepath = $filepath;
     $this->filename = $filename;
     $this->website = \rtrim($website, '/');
     $this->useIndent = $useIndent;
+    $this->flat = $flat;
   }
 
   /**
@@ -51,6 +58,9 @@ class Map extends Writer
     }
     // limit urls per file
     elseif ($this->urlsCount % self::MAX_URL_PER_FILES === 0) {
+      if (true === $this->flat) {
+        throw new Exception('A flat sitemap cannot hold more than ' . self::MAX_URL_PER_FILES . ' urls.');
+      }
       $this->closeFile();
       $this->createNewFile();
     }
@@ -78,8 +88,12 @@ class Map extends Writer
   private function createNewFile(): void
   {
     $this->fileCount++;
+    $this->appendNext = false;
 
-    if ($this->fileCount > 1) {
+    if (true === $this->flat) {
+      $this->currentPath = $this->filepath . $this->filename . '.xml';
+      $this->writtenFilePaths[] = $this->filename . '.xml';
+    } elseif ($this->fileCount > 1) {
       $this->currentPath = $this->filepath . 'sitemap/' . $this->filename . '-' . $this->fileCount . '.xml';
       $this->writtenFilePaths[] = $this->filename . '-' . $this->fileCount . '.xml';
     } else {

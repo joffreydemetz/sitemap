@@ -53,6 +53,29 @@ $sitemap->write();
 
 This generates: `/path/to/public/sitemap/sitemap.xml`
 
+### Flat Sitemap
+
+For a small site, skip the index + `sitemap/` directory layout entirely and write
+one self-contained file at the web root (pass `true` as the 5th argument):
+
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use JDZ\Sitemap\Map;
+use JDZ\Sitemap\Url;
+use JDZ\Sitemap\Frequency;
+
+$sitemap = new Map('/path/to/public/', 'sitemap', 'https://example.com', true, true);
+$sitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
+$sitemap->addItem(new Url('/about', 'now', Frequency::WEEKLY, 0.5));
+$sitemap->write();
+```
+
+This generates: `/path/to/public/sitemap.xml` — no `Index` needed. A flat
+sitemap cannot split, so exceeding 40,000 URLs throws an exception.
+
 ### Sitemap Index
 
 ```php
