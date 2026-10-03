@@ -5,7 +5,7 @@ A modern PHP library for generating XML sitemaps and sitemap indexes compliant w
 ## Features
 
 - 🚀 **Easy to use** - Simple and intuitive API
-- 📦 **Modern PHP** - Built for PHP 8.1+ with type safety
+- 📦 **Modern PHP** - Built for PHP 8.2+ with type safety
 - 🔒 **Type-safe enums** - Use the `Frequency` enum for change frequency values
 - 🎯 **Standards compliant** - Follows sitemaps.org protocol specifications
 - 📝 **Automatic handling** - Manages large sitemaps (splits after 40,000 URLs)
@@ -14,7 +14,7 @@ A modern PHP library for generating XML sitemaps and sitemap indexes compliant w
 
 ## Requirements
 
-- **PHP**: ^8.1
+- **PHP**: >=8.2
 - **Extensions**: 
   - `ext-simplexml`
 
@@ -40,7 +40,7 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 // Create a sitemap
-$sitemap = new Map('/path/to/public', 'sitemap', 'https://example.com');
+$sitemap = new Map('/path/to/public/', 'sitemap', 'https://example.com');
 
 // Add URLs
 $sitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
@@ -52,6 +52,8 @@ $sitemap->write();
 ```
 
 This generates: `/path/to/public/sitemap/sitemap.xml`
+
+`Map` concatenates its path as-is: give it a trailing slash, and create the `sitemap/` directory beforehand (it is not created for you). `Index` takes the path without a trailing slash and writes `<path>/sitemap.xml`.
 
 ### Flat Sitemap
 
@@ -95,7 +97,7 @@ $publicPath = '/path/to/public';
 $index = new Index($publicPath);
 
 // Create main sitemap
-$sitemap = new Map($publicPath, 'sitemap', 'https://example.com');
+$sitemap = new Map($publicPath . '/', 'sitemap', 'https://example.com');
 $sitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
 $sitemap->addItem(new Url('/blog', 'now', Frequency::DAILY, 0.8));
 $sitemap->write();
@@ -106,7 +108,7 @@ foreach ($sitemap->writtenFilePaths as $path) {
 }
 
 // Create subdomain sitemap
-$subSitemap = new Map($publicPath, 'subdomain', 'https://blog.example.com');
+$subSitemap = new Map($publicPath . '/', 'subdomain', 'https://blog.example.com');
 $subSitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
 $subSitemap->addItem(new Url('/posts', 'now', Frequency::WEEKLY, 0.8));
 $subSitemap->write();
@@ -143,9 +145,15 @@ Frequency::NEVER    // 'never'
 
 ## Examples
 
-See the [examples](examples/) directory for detailed examples:
+See the [examples](examples/) directory for detailed examples (they write into `examples/public/`):
 
-- `example.php` - Complete usage demonstration with all verbosity levels
+- `01-basic-sitemap.php` - A simple sitemap with a few URLs
+- `02-using-defaults.php` - URLs relying on the default lastmod, change frequency and priority
+- `03-large-sitemap.php` - Automatic splitting past 40,000 URLs per file
+- `04-sitemap-index.php` - A sitemap index referencing several section sitemaps
+- `05-multiple-domains.php` - Sitemaps for several domains combined in one index
+- `06-frequency-enum.php` - Every `Frequency` case on different kinds of content
+- `07-dynamic-content.php` - A sitemap generated from (simulated) database content
 
 ### Creating a URL with all parameters
 
@@ -188,7 +196,7 @@ $sitemap->addItem(new Url('/page2'));
 The library automatically creates multiple sitemap files when you exceed 40,000 URLs:
 
 ```php
-$sitemap = new Map($publicPath, 'sitemap', 'https://example.com');
+$sitemap = new Map($publicPath . '/', 'sitemap', 'https://example.com');
 
 for ($i = 1; $i <= 100000; $i++) {
     $sitemap->addItem(new Url("/page-{$i}"));
@@ -218,8 +226,12 @@ composer test
 composer test -- --coverage-html coverage
 
 # Run specific test file
-vendor/bin/phpunit tests/OutputTest.php
-vendor/bin/phpunit tests/VerbosityTest.php
+vendor/bin/phpunit tests/MapTest.php
+vendor/bin/phpunit tests/IndexTest.php
+vendor/bin/phpunit tests/UrlTest.php
+vendor/bin/phpunit tests/GroupTest.php
+vendor/bin/phpunit tests/FrequencyTest.php
+vendor/bin/phpunit tests/ExceptionTest.php
 
 # Run with detailed output
 vendor/bin/phpunit --testdox
@@ -230,6 +242,20 @@ vendor/bin/phpunit --testdox
 This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### Version 2.1.0
+
+**New Features:**
+- Flat single-file mode: `new Map($path, $name, $website, $useIndent, true)` writes `{path}{name}.xml` directly, no `sitemap/` directory or index needed (throws past 40,000 URLs)
+
+**Fixes:**
+- Buffered flushes (every 1,000 URLs) now append to the current file instead of truncating it, so maps over 1,000 URLs keep every chunk
+
+### Version 2.0.1
+
+**Maintenance:**
+- Minimum PHP version increased to 8.2
+- PHPUnit 11
 
 ### Version 2.0.0
 
