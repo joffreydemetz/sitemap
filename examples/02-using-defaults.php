@@ -15,9 +15,10 @@ use JDZ\Sitemap\Map;
 use JDZ\Sitemap\Url;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
-    $sitemap = new Map($publicPath, 'defaults', 'https://example.com');
+    $sitemap = new Map($publicPath . '/', 'defaults', 'https://example.com');
 
     // Using all defaults:
     // - lastmod: 'now' (current timestamp)

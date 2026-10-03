@@ -19,14 +19,15 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
     // Create the sitemap index
     $index = new Index($publicPath);
 
     // Main domain sitemap
     echo "Creating sitemap for main domain (example.com)...\n";
-    $mainSitemap = new Map($publicPath, 'example-com', 'https://example.com');
+    $mainSitemap = new Map($publicPath . '/', 'example-com', 'https://example.com');
     $mainSitemap->addItem(new Url('/', 'now', Frequency::DAILY, 1.0));
     $mainSitemap->addItem(new Url('/services', 'now', Frequency::WEEKLY, 0.8));
     $mainSitemap->addItem(new Url('/pricing', 'now', Frequency::MONTHLY, 0.8));
@@ -38,7 +39,7 @@ try {
 
     // Blog subdomain sitemap
     echo "Creating sitemap for blog subdomain (blog.example.com)...\n";
-    $blogSitemap = new Map($publicPath, 'blog-example-com', 'https://blog.example.com');
+    $blogSitemap = new Map($publicPath . '/', 'blog-example-com', 'https://blog.example.com');
     $blogSitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
     for ($i = 1; $i <= 50; $i++) {
         $blogSitemap->addItem(new Url("/posts/article-{$i}", 'now', Frequency::WEEKLY, 0.7));
@@ -51,7 +52,7 @@ try {
 
     // Shop subdomain sitemap
     echo "Creating sitemap for shop subdomain (shop.example.com)...\n";
-    $shopSitemap = new Map($publicPath, 'shop-example-com', 'https://shop.example.com');
+    $shopSitemap = new Map($publicPath . '/', 'shop-example-com', 'https://shop.example.com');
     $shopSitemap->addItem(new Url('/', 'now', Frequency::DAILY, 0.9));
     $shopSitemap->addItem(new Url('/categories', 'now', Frequency::WEEKLY, 0.8));
     for ($i = 1; $i <= 200; $i++) {

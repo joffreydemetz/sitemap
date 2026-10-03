@@ -17,9 +17,10 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
-    $sitemap = new Map($publicPath, 'frequency-demo', 'https://example.com');
+    $sitemap = new Map($publicPath . '/', 'frequency-demo', 'https://example.com');
 
     // ALWAYS - Content that changes with every access
     echo "Adding ALWAYS frequency URLs...\n";

@@ -17,7 +17,8 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
     // Simulate database content
     $blogPosts = [
@@ -39,7 +40,7 @@ try {
     ];
 
     // Create sitemap
-    $sitemap = new Map($publicPath, 'dynamic', 'https://example.com');
+    $sitemap = new Map($publicPath . '/', 'dynamic', 'https://example.com');
 
     // Add homepage
     $sitemap->addItem(new Url('/', 'now', Frequency::DAILY, 1.0));

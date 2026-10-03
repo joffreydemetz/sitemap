@@ -17,9 +17,10 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
-    $sitemap = new Map($publicPath, 'products', 'https://example.com');
+    $sitemap = new Map($publicPath . '/', 'products', 'https://example.com');
 
     echo "Generating large sitemap with 50,000 URLs...\n";
 

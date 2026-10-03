@@ -19,7 +19,8 @@ use JDZ\Sitemap\Url;
 use JDZ\Sitemap\Frequency;
 
 try {
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
     $baseUrl = 'https://example.com';
 
     // Create the sitemap index
@@ -27,7 +28,7 @@ try {
 
     // Create sitemap for main pages
     echo "Creating main pages sitemap...\n";
-    $mainSitemap = new Map($publicPath, 'main', $baseUrl);
+    $mainSitemap = new Map($publicPath . '/', 'main', $baseUrl);
     $mainSitemap->addItem(new Url('/', 'now', Frequency::DAILY, 1.0));
     $mainSitemap->addItem(new Url('/about', 'now', Frequency::MONTHLY, 0.8));
     $mainSitemap->addItem(new Url('/contact', 'now', Frequency::MONTHLY, 0.7));
@@ -40,7 +41,7 @@ try {
 
     // Create sitemap for blog
     echo "Creating blog sitemap...\n";
-    $blogSitemap = new Map($publicPath, 'blog', $baseUrl);
+    $blogSitemap = new Map($publicPath . '/', 'blog', $baseUrl);
     for ($i = 1; $i <= 100; $i++) {
         $blogSitemap->addItem(new Url("/blog/post-{$i}", 'now', Frequency::WEEKLY, 0.8));
     }
@@ -53,7 +54,7 @@ try {
 
     // Create sitemap for products
     echo "Creating products sitemap...\n";
-    $productsSitemap = new Map($publicPath, 'products', $baseUrl);
+    $productsSitemap = new Map($publicPath . '/', 'products', $baseUrl);
     for ($i = 1; $i <= 500; $i++) {
         $productsSitemap->addItem(new Url("/products/item-{$i}", 'now', Frequency::DAILY, 0.7));
     }

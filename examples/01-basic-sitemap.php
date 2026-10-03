@@ -17,10 +17,11 @@ use JDZ\Sitemap\Frequency;
 
 try {
     // Define the output directory
-    $publicPath = realpath(__DIR__ . '/public');
+    $publicPath = __DIR__ . '/public';
+    @mkdir($publicPath . '/sitemap', 0755, true);
 
     // Create a new sitemap
-    $sitemap = new Map($publicPath, 'sitemap', 'https://example.com');
+    $sitemap = new Map($publicPath . '/', 'sitemap', 'https://example.com');
 
     // Add homepage with high priority
     $sitemap->addItem(new Url('/', 'now', Frequency::DAILY, 1.0));
