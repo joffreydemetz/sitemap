@@ -243,6 +243,9 @@ This library is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Changelog
 
+### Version 2.1.1
+- A website given with a trailing slash no longer produces a double slash before the page
+
 ### Version 2.1.0
 
 **New Features:**
