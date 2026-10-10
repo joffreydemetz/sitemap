@@ -44,7 +44,8 @@ class Url
   public function toSitemap(string $website): array
   {
     $location = \ltrim($this->loc, '/');
-    $location = $website . '/' . $location;
+    // one slash between them (a website ending with / gave two)
+    $location = \rtrim($website, '/') . '/' . $location;
 
     if (false === \filter_var($location, \FILTER_VALIDATE_URL)) {
       throw new Exception('The location must be a valid URL. You have specified: ' . $location);

@@ -58,8 +58,8 @@ class UrlTest extends TestCase
 
         $result = $url->toSitemap($website);
 
-        // Should handle trailing slash correctly
-        $this->assertEquals('https://example.com//test-page', $result['loc']);
+        // one slash between the website and the page (a trailing slash gave two)
+        $this->assertEquals('https://example.com/test-page', $result['loc']);
     }
 
     public function testToSitemapWithLeadingSlashInLoc()
