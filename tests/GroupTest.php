@@ -13,20 +13,6 @@ use JDZ\Sitemap\Exception;
 
 class GroupTest extends TestCase
 {
-    public function testGroupCreationWithDefaults()
-    {
-        $group = new Group('https://example.com/sitemap.xml');
-        
-        $this->assertInstanceOf(Group::class, $group);
-    }
-
-    public function testGroupCreationWithCustomDate()
-    {
-        $group = new Group('https://example.com/sitemap.xml', '2023-01-15 10:00:00');
-        
-        $this->assertInstanceOf(Group::class, $group);
-    }
-
     public function testToSitemapWithValidUrl()
     {
         $group = new Group('https://example.com/sitemap.xml', '2023-06-15 14:30:00');

@@ -21,8 +21,8 @@ class MapTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        // Ensure tests/_data directory exists
-        self::$baseTestDir = __DIR__ . DIRECTORY_SEPARATOR . '_data';
+        // a scratch directory outside the repository
+        self::$baseTestDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'jdz-sitemap';
         if (!is_dir(self::$baseTestDir)) {
             mkdir(self::$baseTestDir, 0777, true);
         }
@@ -60,27 +60,6 @@ class MapTest extends TestCase
             is_dir($path) ? $this->removeDirectory($path) : unlink($path);
         }
         rmdir($dir);
-    }
-
-    public function testMapCreation()
-    {
-        $map = new Map($this->testDir, 'test-sitemap', 'https://example.com');
-
-        $this->assertInstanceOf(Map::class, $map);
-    }
-
-    public function testMapCreationWithIndent()
-    {
-        $map = new Map($this->testDir, 'test-sitemap', 'https://example.com', true);
-
-        $this->assertInstanceOf(Map::class, $map);
-    }
-
-    public function testMapCreationWithoutIndent()
-    {
-        $map = new Map($this->testDir, 'test-sitemap', 'https://example.com', false);
-
-        $this->assertInstanceOf(Map::class, $map);
     }
 
     public function testAddSingleItem()

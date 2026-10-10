@@ -14,13 +14,6 @@ use JDZ\Sitemap\Exception;
 
 class UrlTest extends TestCase
 {
-    public function testUrlCreationWithDefaults()
-    {
-        $url = new Url('/test-page');
-
-        $this->assertInstanceOf(Url::class, $url);
-    }
-
     public function testUrlCreationWithAllParameters()
     {
         $url = new Url(
@@ -184,14 +177,6 @@ class UrlTest extends TestCase
 
         $url = new Url('/test');
         $url->toSitemap('not-a-valid-url');
-    }
-
-    public function testFrequencyEnumUsage()
-    {
-        $url = new Url('/test', 'now', Frequency::DAILY, 0.8);
-        $result = $url->toSitemap('https://example.com');
-
-        $this->assertEquals('daily', $result['changefreq']);
     }
 
     public function testAllFrequencyEnumCases()

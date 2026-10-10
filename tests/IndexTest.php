@@ -20,8 +20,8 @@ class IndexTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        // Ensure tests/_data directory exists
-        self::$baseTestDir = __DIR__ . DIRECTORY_SEPARATOR . '_data';
+        // a scratch directory outside the repository
+        self::$baseTestDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'jdz-sitemap';
         if (!is_dir(self::$baseTestDir)) {
             mkdir(self::$baseTestDir, 0777, true);
         }
@@ -57,27 +57,6 @@ class IndexTest extends TestCase
             is_dir($path) ? $this->removeDirectory($path) : unlink($path);
         }
         rmdir($dir);
-    }
-
-    public function testIndexCreation()
-    {
-        $index = new Index($this->testDir);
-
-        $this->assertInstanceOf(Index::class, $index);
-    }
-
-    public function testIndexCreationWithIndent()
-    {
-        $index = new Index($this->testDir, true);
-
-        $this->assertInstanceOf(Index::class, $index);
-    }
-
-    public function testIndexCreationWithoutIndent()
-    {
-        $index = new Index($this->testDir, false);
-
-        $this->assertInstanceOf(Index::class, $index);
     }
 
     public function testAddSingleItem()
